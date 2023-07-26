@@ -1,0 +1,120 @@
+\documentclass[12pt, letterpaper]{scrartcl}
+
+\usepackage{fullpage} % Set margins and place page numbers at bottom center
+\usepackage[shortlabels]{enumitem} % Use a. in the enumerate
+\usepackage{amsmath} % aligned equations
+\usepackage{graphicx} % include figure
+\usepackage{float} % usage of H for figure float
+\usepackage{amssymb} % \varnothing
+\usepackage{subfigure}
+\usepackage{xcolor} % color in math mode
+\DeclareMathOperator*{\argmin}{argmin} % argmin
+
+\begin{document}
+
+% ### Header - start ###
+    \begin{center}
+    	\hrule
+    	\vspace{0.4cm}
+    	{\textbf { {\large Homework 7} \\ EE 513 --- Stochastic Systems Theory}}
+    \end{center}
+    { \textbf{Name:} Ali Zafari \hspace{\fill} \textbf{Student Number:} 800350381 \hspace{\fill} \textbf{Fall 2022} } \newline\hrule
+% ### Header - end ###
+\paragraph*{Problem 7.1} \hfill\\
+\begin{enumerate}[((a))]
+    \item 
+    \begin{align*}
+        \mathbb{E}_\Theta[X(t)]&=\int_{-\pi}^{\pi}\frac{1}{2\pi}2\sin(2\pi(1000)t+\theta)d\theta\\
+        &=-\frac{1}{\pi}\cos(2\pi(1000)t+\pi)+\frac{1}{\pi}\cos(2\pi(1000)t-\pi)\\
+        &=-\frac{1}{\pi}[\cos2\pi(1000)t\cos\pi-sin\pi\sin2\pi(1000)t]+\cos2\pi(1000)t\cos\pi+sin\pi\sin2\pi(1000)t]\\
+        &=0
+    \end{align*}
+    
+    \item
+    \begin{align*}
+        R_{XX}(t, u)&=\mathbb{E}_\Theta[X(t)X(u)]\\
+        &=\mathbb{E}_\Theta[2\sin(2\pi(1000)t+\theta)\times2\sin(2\pi(1000)u+\theta)]\\
+        &=2\mathbb{E}_\Theta[\cos(2\pi(1000)(t-u))]-2\mathbb{E}_\Theta[\cos(2\pi(1000)(t+u)+2\theta)]\\
+        &=2\cos(2\pi(1000)(t-u))
+    \end{align*}
+
+    \item$X(t)$ IS wide sense stationary (WSS), since it satisfies following 2 conditions:
+    \begin{itemize}
+        \item $\mathbb{E}_\Theta[X(t)]$ is constant with respect to time.
+        \item Autocorrelation function ($R_{XX}(t, u)$) can be written as a function of difference in time, i.e. $R_{XX}(t, u)=R_{XX}(t-u)=R_{XX}(\tau)=2\cos(2\pi(1000)\tau)$.
+    \end{itemize}
+    Then the power spectral density will be the Fourier transform of autocorrelation function:
+    \begin{align*}
+        S_X(f)&=\int_{-\infty}^{+\infty}R_{XX}(\tau)e^{-j2\pi f\tau}d\tau\\
+        &=\int_{-\infty}^{+\infty}\frac{e^{j2\pi 1000\tau}+e^{-j2\pi 1000\tau}}{2} e^{-j2\pi f\tau}d\tau\\
+        &=\delta(f-1000)+\delta(f+1000)
+    \end{align*}
+\end{enumerate}
+\hrule
+
+\paragraph*{Problem 7.2} \hfill\\
+\begin{enumerate} [((a))]
+    \item For a WSS process, the autocorrelation function is the inverse Fourier transform of its power spectral density:
+    \begin{align*}
+        S_{W}(f)\xrightarrow[]{\mathcal{F}^{-1}}R_{W}(\tau)=\frac{N_0}{2}\delta(\tau)=0.1\delta(\tau)
+    \end{align*}
+
+    \item For an LTI system we have:
+    \begin{align*}
+        m_{\widetilde{W}} &= m_W H(0)=0\times2=0
+    \end{align*}
+
+    \item
+    \begin{align*}
+        \widetilde{W}(t)=W(t)*h(t)\xrightarrow[]{\mathcal{F}} S_{\widetilde{W}}(f)&=S_W(f)|H(f)|^2\\
+        &=\frac{N_0}{2}\times4rect(\frac{f}{20})\\
+        &=0.4rect(\frac{f}{20})
+    \end{align*}
+
+    \item 
+    \begin{align*}
+    S_{\widetilde{W}}(f)=0.4rect(\frac{f}{20})\xrightarrow[]{\mathcal{F}^{-1}}R_{\widetilde{W}}(\tau)=8sinc(20\tau)\\
+        \mathbb{E}[\widetilde{W}^2(t)]=R_{\widetilde{W}}(0)=8sinc(20\times0)=8
+    \end{align*}
+
+    \item
+    A Gaussian process at any specific time is a Gaussian random variable. Since the filter is LTI, the output will also be a Gaussian process and by considering it at time $t_1$ it will be a Gaussian random variable, which is characterized only by its mean and variance:
+    \begin{align*}
+        \mathbb{E}[\widetilde{W}(t_1)]&=\int_{-\infty}^\infty h(x)W(t_1-x)dx\\
+        &=\int_{-\infty}^\infty h(x)\mathbb{E}[W(t_1-x)]dx\\
+        &=0\\\\
+        Var[\widetilde{W}(t_1)] &= \mathbb{E}[\widetilde{W}^2(t_1)]-\mathbb{E}^2[\widetilde{W}(t_1)]\\
+        &=8-0
+    \end{align*}
+    therefore the the output at time $t_1$ is a Gaussian random variable: $\widetilde{W}(t_1)\sim \mathcal{N}(0,8)$
+
+    \item
+    Using Q-function it is easy to calculate:
+    \begin{align*}
+        P(\widetilde{W}(t_1)>3)=Q(\frac{3}{\sqrt{8}})
+    \end{align*}
+\end{enumerate}
+\hrule
+
+\paragraph*{Problem 7.3} \hfill\\
+Signal to Noise Ratio at the output can be written as:
+\begin{align*}
+    SNR=\frac{P_{Y}}{P_{N_{output}}}
+\end{align*}
+where power is the area under the curve of power spectral density for each targetted signal.
+\begin{align*}
+    P_{N_{output}}&=\int_{-\infty}^{+\infty}\frac{N_0}{2}|H(f)|^2df\\
+    &=0.001\times(25)\times(2000) + 2\times0.001\times(4)\times(1000)\\
+    &=58 \quad\textsc{[Watts]}\\\\
+    P_{Y}&=\int_{-\infty}^{+\infty}\frac{6000}{3000}rect(\frac{f}{3000})|H(f)|^2df\\
+    &=50\times(2000) + 2\times8\times(500)\\
+    &=108,000 \quad\textsc{[Watts]}
+\end{align*}
+Therefore to have the SNR in decibels, we have:
+\begin{align*}
+    SNR_{dB}=10\log\frac{P_{Y}}{P_{N_{output}}}=10\log\frac{108000}{58}=32.7
+\end{align*}
+\hrule
+
+\end{document}
+

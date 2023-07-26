@@ -1,0 +1,178 @@
+\documentclass[12pt, letterpaper]{scrartcl}
+
+\usepackage{fullpage} % Set margins and place page numbers at bottom center
+\usepackage[shortlabels]{enumitem} % Use a. in the enumerate
+\usepackage{amsmath} % aligned equations
+\usepackage{graphicx} % include figure
+\usepackage{float} % usage of H for figure float
+\usepackage{amssymb} % \varnothing
+\usepackage{subfigure}
+\usepackage{xcolor} % color in math mode
+\DeclareMathOperator*{\argmin}{argmin} % argmin
+
+\begin{document}
+
+% ### Header - start ###
+    \begin{center}
+    	\hrule
+    	\vspace{0.4cm}
+    	{\textbf { {\large Homework 6} \\ EE 513 --- Stochastic Systems Theory}}
+    \end{center}
+    { \textbf{Name:} Ali Zafari \hspace{\fill} \textbf{Student Number:} 800350381 \hspace{\fill} \textbf{Fall 2022} } \newline\hrule
+% ### Header - end ###
+\paragraph*{Problem 6.1} \hfill\\
+For $x\in\{0,1,\dots,5\}$:
+\begin{align*}
+    &H_1 : \qquad p(X=x|H_1)={5 \choose x}(\frac{2}{3})^x(\frac{1}{3})^{5-x}\\
+    &H_\circ : \qquad p(X=x|H_\circ)={5 \choose x}(\frac{1}{2})^x(\frac{1}{2})^{5-x}
+\end{align*}
+\textbf{ML Decision Rule:}
+\begin{align*}
+    \log \frac{p(X=x|H_1)}{p(X=x|H_\circ)} &\mathop{\gtrless}^{H_1}_{H_\circ} 0\\
+    \log{\frac{2^{5+x}}{3^5}}&\mathop{\gtrless}^{H_1}_{H_\circ} 0\\
+    x&\mathop{\gtrless}^{H_1}_{H_\circ} 5\frac{\log3}{\log2}-5\\
+    x&\mathop{\gtrless}^{H_1}_{H_\circ}2.92
+\end{align*}
+\begin{align*}
+    P_{FalseAlarm}=P(H_1|H_\circ)=\sum_{x\in\{3,4,5\}}p(X=x|H_\circ)=0.5
+\end{align*}
+\begin{align*}
+    P_{Miss}=P(H_\circ|H_1)=\sum_{x\in\{0,1,2\}}p(X=x|H_1)=0.2098
+\end{align*}
+\begin{align*}
+    P_{Error}=\frac{1}{2}P_{FalseAlarm}+\frac{1}{2}P_{Miss}=0.3549
+\end{align*}
+
+\textbf{MAP Decision Rule:}
+\begin{align*}
+    \log \frac{p(X=x|H_1)}{p(X=x|H_\circ)} &\mathop{\gtrless}^{H_1}_{H_\circ} \log\frac{\pi_0}{\pi_1}\\
+    \log{\frac{2^{5+x}}{3^5}}&\mathop{\gtrless}^{H_1}_{H_\circ} \log\frac{0.8}{0.2}\\
+    x&\mathop{\gtrless}^{H_1}_{H_\circ}4.92
+\end{align*}
+\begin{align*}
+    P_{FalseAlarm}=P(H_1|H_\circ)=\sum_{x\in\{5\}}p(X=x|H_\circ)=\frac{1}{2^5}=0.03125
+\end{align*}
+\begin{align*}
+    P_{Miss}=P(H_\circ|H_1)=\sum_{x\in\{0,1,2,3,4\}}p(X=x|H_1)=1-(\frac{2}{3})^5=0.8683
+\end{align*}
+\begin{align*}
+    P_{Error}=0.8P_{FalseAlarm}+0.2P_{Miss}=0.1987
+\end{align*}
+\hrule
+
+\paragraph*{Problem 6.2} \hfill\\
+For $y\in\{1,2,3,\dots\}$:
+\begin{align*}
+    &H_1 : \qquad p(Y=y|H_1)=0.5(1-0.5)^{y-1}\\
+    &H_\circ : \qquad p(Y=y|H_\circ)=0.2(1-0.2)^{y-1}
+\end{align*}
+\begin{enumerate}[((a))]
+    \item ML decision rule:
+    \begin{align*}
+        \log \frac{p(Y=y|H_1)}{p(Y=y|H_\circ)} &\mathop{\gtrless}^{H_1}_{H_\circ}0\\
+        y\log(\frac{5}{8})+\log(\frac{0.8}{0.2})&\mathop{\gtrless}^{H_1}_{H_\circ}0\\
+        y\log(\frac{5}{8})&\mathop{\gtrless}^{H_1}_{H_\circ} -2\\
+        y&\mathop{\lessgtr}^{H_1}_{H_\circ} \frac{-2}{\log(\frac{5}{8})}\\
+        y&\mathop{\lessgtr}^{H_1}_{H_\circ} 2.94
+    \end{align*}
+
+    \item For the ML decision rule:
+    \begin{align*}
+        P_{FalseAlarm}=P(H_1|H_\circ)=\sum_{y\in\{1,2\}}p(Y=y|H_\circ)=0.36
+    \end{align*}
+    \begin{align*}
+        P_{Miss}=P(H_\circ|H_1)=\sum_{y\in\{3,4,\dots\}}p(Y=y|H_1)=1-(0.5^1+0.5^2)=0.25
+    \end{align*}
+    
+    \item MAP decision rule:
+    \begin{align*}
+        \log \frac{p(Y=y|H_1)}{p(Y=y|H_\circ)} &\mathop{\gtrless}^{H_1}_{H_\circ}\log\frac{\pi_\circ}{\pi_1}\\
+        \log \frac{p(Y=y|H_1)}{p(Y=y|H_\circ)} &\mathop{\gtrless}^{H_1}_{H_\circ}\log(\frac{2/3}{1/3})\\
+        y\log(\frac{5}{8}) + \log(\frac{0.8}{0.2}) &\mathop{\gtrless}^{H_1}_{H_\circ}1\\
+        y\log(\frac{5}{8})&\mathop{\gtrless}^{H_1}_{H_\circ} -1\\
+        y&\mathop{\lessgtr}^{H_1}_{H_\circ} \frac{-1}{\log(\frac{5}{8})}\\
+        y&\mathop{\lessgtr}^{H_1}_{H_\circ} 1.47\\
+    \end{align*}
+    For the MAP decision rule:
+    \begin{align*}
+        P_{FalseAlarm}=P(H_1|H_\circ)=\sum_{y\in\{1\}}p(Y=y|H_\circ)=0.2
+    \end{align*}
+    \begin{align*}
+        P_{Miss}=P(H_\circ|H_1)=\sum_{y\in\{2,3,\dots\}}p(Y=y|H_1)=1-0.5=0.5
+    \end{align*}
+    
+    \item ML decision rule:
+    \begin{align*}
+        P_{Error}=\frac{2}{3}P_{FalseAlarm}+\frac{1}{3}P_{Miss}=0.3233
+    \end{align*}
+    MAP decision rule:
+    \begin{align*}
+        P_{Error}=\frac{2}{3}P_{FalseAlarm}+\frac{1}{3}P_{Miss}=0.3
+    \end{align*}
+\end{enumerate}
+
+
+
+\hrule
+
+
+\paragraph*{Problem 6.3} \hfill\\
+\begin{enumerate}[((a))]
+    \item 
+    Since $S$ and $N$ are independent the distribution of $Y$ will be:
+    \begin{align*}
+        &H_1 : f_Y(y) = f_N(y)*f_S(y)=\int_{0}^{y} e^{-t}e^{-(y-t)dt}=ye^{-y}u(y)\\
+        &H_\circ : f_Y(y) = f_N(y) = e^{-y}u(y)
+    \end{align*}
+    The likelihood ratio will be:
+    \begin{align*}
+        \Lambda(y)=y \qquad , y\geq0
+    \end{align*}
+    
+    \item By assuming a threshold of 1 (equal priors), we can calculate the total probability of error:
+    \begin{align*}
+        P_{FalseAlarm}=P(H_1|H_\circ)=\int_1^{+\infty}e^{-y}dy=e^{-1}
+    \end{align*}
+    \begin{align*}
+        P_{Miss}=P(H_\circ|H_1)=\int_0^{1}ye^{-y}dy=1-2e^{-1}
+    \end{align*}
+    Therefore:
+    \begin{align*}
+        P_{Error}=\frac{1}{2}P_{FalseAlarm}+\frac{1}{2}P_{Miss}=\frac{1}{2}(1-e^{-1})
+    \end{align*}
+\end{enumerate}
+\hrule
+
+\paragraph*{Problem 6.4} \hfill\\
+
+We first derive the likelihood function. It is a function of both true parameters $\mu$ and $\sigma$:
+\begin{align*}
+    \mathcal{L}=\sum_i\log f(v_i)&=-\frac{n}{2}\log2\pi\sigma^2+\sum_1^n\frac{(v_i-\mu)^2}{2\sigma^2}
+\end{align*}
+now the derivatives with respect to both parameters should be found and simultaneously set to zero, to find the maximum likelihood estimates for both of them (derivation wrt to $\sigma^2$ will make no difference for variance estimation):
+\begin{align*}
+    &\frac{\partial\mathcal{L}}{\partial\mu}=\sum_1^n\frac{v_i-\mu}{\sigma^2}=0 \longrightarrow \hat{\mu}=\frac{1}{n}\sum_1^nv_i\\
+    &\frac{\partial\mathcal{L}}{\partial\sigma^2}=-\frac{n}{2\sigma^2}-\sum_1^n\frac{(v_i-\hat{\mu})^2}{2\sigma^4}=0 \longrightarrow \hat{\sigma^2}=\frac{1}{n}\sum_1^n(v_i-\hat{\mu})
+\end{align*}
+Then we evaluate the expectations for both of the estimators:
+\begin{align*}
+    \mathbb{E}[\hat{\mu}]&=\frac{1}{n}\sum_1^n\mathbb{E}[v_i]=\mu \qquad \textsc{(UNBIASED Estimator)}\\
+    \mathbb{E}[\hat{\sigma^2}]&=\frac{1}{n}\mathbb{E}[\sum_1^n(v_i-\hat{\mu})]\\
+    &=\sigma^2+\mu^2+\frac{-\sigma^2-\mu^2-n\mu^2+\mu^2}{n}\\
+    &=\frac{n-1}{n}\sigma^2 \qquad\textsc{(BIASED Estimator)}
+\end{align*}
+
+\hrule
+
+\paragraph*{Problem 6.5} \hfill\\
+
+MAP estimate will maximize the posterior which is equivalent to maximizing the product of likelihood and prior.
+\begin{align*}
+    &\frac{\partial}{\partial a}\sum_k\log f(A|R_k)=0 \longrightarrow \frac{\partial}{\partial a}\sum_k\log f(R_k|A)f(A)=0\\
+    &\frac{\partial}{\partial a}(\frac{-1}{\sigma_N^2}\sum(r_k-a)^2+\frac{-1}{2\sigma_A^2}a^2+\dots \text{not dependent on }a\dots)=0\\
+    &\hat{a}=\frac{\sigma_A^2}{K\sigma_A^2+\sigma_N^2}\sum r_k
+\end{align*}
+
+\hrule
+\end{document}
+
